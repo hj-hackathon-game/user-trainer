@@ -7,11 +7,28 @@
 </head>
 <body>
 <div id="app">
-    <div>{{problem.description}}</div>
-    <button v-on:click = "next(0)">A</button>
-    <button v-on:click = "next(1)">B</button>
-    <button v-on:click = "next(2)">C</button>
-    <button v-on:click = "next(3)">D</button>
+    <div v-show="finish == 0">
+        <div>{{problem.description}}</div>
+        <button v-on:click = "next(0)">A</button>
+        <button v-on:click = "next(1)">B</button>
+        <button v-on:click = "next(2)">C</button>
+        <button v-on:click = "next(3)">D</button>
+    </div>
+
+    <div v-show="finish == 1">
+        <input type="checkbox" v-model="checked0">词汇量不足
+        <input type="checkbox" v-model="checked1">语法能力差
+        <input type="checkbox" v-model="checked2">阅读速度慢
+        <button v-on:click = "end()">提交</button>
+    </div>
+
+    <div v-show="finish == 2">
+        请将下面内容发送到收集者手上
+        <br>
+        {{json(1)}}
+        <br>
+        {{json(2)}}
+    </div>
 </div>
 
 <script>
@@ -21,7 +38,11 @@
             answer: [],
             expect: [],
             time: 0.0,
+            finish: 0,
             id: -1,
+            checked0: false,
+            checked1: false,
+            checked2: false,
             problem: {id: -1, description: '', answer: 0}
         },
         methods: {
@@ -33,12 +54,31 @@
                 }
                 vue.answer.push(new Date().getTime()/1000 - vue.time);
                 vue.time = new Date().getTime()/1000;
-                vue.id++;
-                vue.problem = problemSet[vue.id]
+                if(vue.id == 9){
+                    vue.finish = 1;
+                }else{
+                    vue.id++;
+                    vue.problem = problemSet[vue.id];
+                }
+            },
+            json: function(num){
+                if(num == 1){
+                    return JSON.stringify(this.answer);
+                } else {
+                    return JSON.stringify(this.expect);
+                }
+
+            },
+            end: function(){
+                this.finish = 2;
+                this.expect.push(this.checked0?1.0:0.0);
+                this.expect.push(this.checked1?1.0:0.0);
+                this.expect.push(this.checked2?1.0:0.0);
             }
         }
     });
     vue.next();
+    vue.answer = [];
     vue.time = new Date().getTime()/1000;
 </script>
 </body>
