@@ -31,12 +31,15 @@
                 } else {
                     vue.answer.push(0.0)
                 }
+                vue.answer.push(new Date().getTime()/1000 - vue.time);
+                vue.time = new Date().getTime()/1000;
                 vue.id++;
                 vue.problem = problemSet[vue.id]
             }
         }
     });
     vue.next();
+    vue.time = new Date().getTime()/1000;
 </script>
 </body>
 </html>
