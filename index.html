@@ -1,11 +1,42 @@
 <!Doctype html>
-<html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <title>训练机</title>
     <script src="js/vue.js"></script>
     <script src="js/set.js"></script>
 </head>
 <body>
+<div id="app">
+    <div>{{problem.description}}</div>
+    <button v-on:click = "next(0)">A</button>
+    <button v-on:click = "next(1)">B</button>
+    <button v-on:click = "next(2)">C</button>
+    <button v-on:click = "next(3)">D</button>
+</div>
 
+<script>
+    vue = new Vue({
+        el: '#app',
+        data: {
+            answer: [],
+            expect: [],
+            time: 0.0,
+            id: -1,
+            problem: {id: -1, description: '', answer: 0}
+        },
+        methods: {
+            next: function(num){
+                if (vue.problem.answer === num){
+                    vue.answer.push(1.0)
+                } else {
+                    vue.answer.push(0.0)
+                }
+                vue.id++;
+                vue.problem = problemSet[vue.id]
+            }
+        }
+    });
+    vue.next();
+</script>
 </body>
 </html>
